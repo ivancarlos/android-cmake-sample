@@ -50,7 +50,9 @@ android {
             version = "3.22.1"
         }
     }
-    ndkVersion = "29.0.14033849"
+
+    // Remover ou comentar ndkVersion para usar o NDK do Conan
+    // ndkVersion = "29.0.14033849"
 }
 
 dependencies {
