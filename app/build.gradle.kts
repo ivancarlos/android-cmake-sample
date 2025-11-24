@@ -23,6 +23,20 @@ android {
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
         }
+
+        // Argumentos para o CMake - tornar verboso
+        externalNativeBuild {
+            cmake {
+                // Tornar o CMake verboso
+                arguments(
+                    "-DCMAKE_VERBOSE_MAKEFILE=ON",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                )
+                // Flags adicionais de C++
+                cppFlags("-v")  // Mostrar detalhes do compilador
+                cFlags("-v")    // Mostrar detalhes do compilador C
+            }
+        }
     }
 
     buildTypes {
@@ -50,7 +64,7 @@ android {
             version = "3.22.1"
         }
     }
-
+    
     // Remover ou comentar ndkVersion para usar o NDK do Conan
     // ndkVersion = "29.0.14033849"
 }
@@ -78,29 +92,29 @@ val abiList = listOf(
 // Criar uma tarefa de Conan para cada ABI
 abiList.forEach { (abi, conanArch) ->
     val conanBuildDir = project.layout.buildDirectory.dir(".cxx/conan/debug/${abi}").get().asFile
-
+    
     val taskName = "conanInstall${abi.replace("-", "").capitalize()}"
-
+    
     tasks.register<Exec>(taskName) {
         description = "Installs Conan dependencies for $abi"
         group = "conan"
-
+        
         doFirst {
             conanBuildDir.mkdirs()
         }
-
+        
         workingDir = conanBuildDir
-
+        
         commandLine(
             "conan", "install",
             rootProject.file("conanfile.py").absolutePath,
-            "-pr:h", rootProject.file("conan/android_profile").absolutePath,
+            "-pr:h=android_profile",
             "-pr:b=default",
             "-s:h", "build_type=Debug",
             "-s:h", "arch=${conanArch}",
             "--output-folder", conanBuildDir.absolutePath
         )
-
+        
         outputs.file(conanBuildDir.resolve("conan_toolchain.cmake"))
         outputs.upToDateWhen { conanBuildDir.resolve("conan_toolchain.cmake").exists() }
     }
