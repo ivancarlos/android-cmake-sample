@@ -5,11 +5,17 @@ plugins {
     kotlin("android")
 }
 
-val compileSdkProjectVersion: Int by project
-val minSdkProjectVersion: Int by project
-val targetSdkProjectVersion: Int by project
+val compileSdkProjectVersion =
+    project.findProperty("compileSdkProjectVersion")!!.toString().toInt()
+val minSdkProjectVersion =
+    project.findProperty("minSdkProjectVersion")!!.toString().toInt()
+val targetSdkProjectVersion =
+    project.findProperty("targetSdkProjectVersion")!!.toString().toInt()
 
 android {
+    // Novo com AGP 8+
+    namespace = "fr.bowserf.cmakesample"
+
     compileSdk = compileSdkProjectVersion
 
     defaultConfig {
@@ -19,22 +25,18 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        // specify for which architectures we want to generate native library files.
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
         }
 
-        // Argumentos para o CMake - tornar verboso
         externalNativeBuild {
             cmake {
-                // Tornar o CMake verboso
                 arguments(
                     "-DCMAKE_VERBOSE_MAKEFILE=ON",
                     "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
                 )
-                // Flags adicionais de C++
-                cppFlags("-v")  // Mostrar detalhes do compilador
-                cFlags("-v")    // Mostrar detalhes do compilador C
+                cppFlags("-v")
+                cFlags("-v")
             }
         }
     }
@@ -58,24 +60,16 @@ android {
 
     externalNativeBuild {
         cmake {
-            // define the path where the CMakeList has been put for this module.
             path("src/main/cpp/CMakeLists.txt")
-            // specify the CMake version we want to use.
             version = "3.22.1"
         }
     }
-    
-    // Remover ou comentar ndkVersion para usar o NDK do Conan
-    // ndkVersion = "29.0.14033849"
 }
 
 dependencies {
-    // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
-
-    // Android support
-    implementation("com.android.support:appcompat-v7:28.0.0")
-    implementation("com.android.support.constraint:constraint-layout:1.1.3")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 }
 
 // ====================================================================
@@ -89,22 +83,21 @@ val abiList = listOf(
     "x86_64" to "x86_64"
 )
 
-// Criar uma tarefa de Conan para cada ABI
 abiList.forEach { (abi, conanArch) ->
     val conanBuildDir = project.layout.buildDirectory.dir(".cxx/conan/debug/${abi}").get().asFile
-    
-    val taskName = "conanInstall${abi.replace("-", "").capitalize()}"
-    
+
+    val taskName = "conanInstall${abi.replace("-", "").replaceFirstChar { it.uppercase() }}"
+
     tasks.register<Exec>(taskName) {
         description = "Installs Conan dependencies for $abi"
         group = "conan"
-        
+
         doFirst {
             conanBuildDir.mkdirs()
         }
-        
+
         workingDir = conanBuildDir
-        
+
         commandLine(
             "conan", "install",
             rootProject.file("conanfile.py").absolutePath,
@@ -114,7 +107,7 @@ abiList.forEach { (abi, conanArch) ->
             "-s:h", "arch=${conanArch}",
             "--output-folder", conanBuildDir.absolutePath
         )
-        
+
         outputs.file(conanBuildDir.resolve("conan_toolchain.cmake"))
         outputs.upToDateWhen { conanBuildDir.resolve("conan_toolchain.cmake").exists() }
     }
@@ -124,23 +117,22 @@ abiList.forEach { (abi, conanArch) ->
 // Configurar dependências das tarefas de build do CMake
 // ====================================================================
 
-// Garantir que as tarefas do Conan rodem antes do CMake configurar
 tasks.configureEach {
     if (name.contains("configureCMake", ignoreCase = true)) {
-        // Extrair o ABI do nome da tarefa, ex: configureCMakeDebug[arm64-v8a]
         val abiMatch = Regex("""\[(.*?)\]""").find(name)
         if (abiMatch != null) {
             val abi = abiMatch.groupValues[1]
-            val taskName = "conanInstall${abi.replace("-", "").capitalize()}"
+            val taskName =
+                "conanInstall${abi.replace("-", "").replaceFirstChar { it.uppercase() }}"
             dependsOn(taskName)
         }
     }
 }
 
-// Também adicionar dependência no preBuild como fallback
 tasks.named("preBuild") {
     abiList.forEach { (abi, _) ->
-        val taskName = "conanInstall${abi.replace("-", "").capitalize()}"
+        val taskName =
+            "conanInstall${abi.replace("-", "").replaceFirstChar { it.uppercase() }}"
         dependsOn(taskName)
     }
 }
