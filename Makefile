@@ -28,7 +28,7 @@ build_library_debug:
 
 assembleDebug: ## Build APK debug
 	$(GRADLE) assembleDebug
-debug: build_library_debug assembleDebug   # atalho
+debug: assembleDebug   # atalho
 
 assembleRelease: ## Build APK release (não assinado)
 	$(GRADLE) assembleRelease
