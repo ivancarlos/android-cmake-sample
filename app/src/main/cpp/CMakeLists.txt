@@ -1,8 +1,21 @@
 # Define the minimum version of CMake required to use this CMakeList.
-# Some functions don't exist in previous version of CMake by exampe.
 cmake_minimum_required(VERSION 3.5)
 
-# Define a name for this project. It will be accessible with ${PROJECT_NAME}.
+# ----------------------------------------
+# Configurar Conan Toolchain (se disponível)
+# ----------------------------------------
+# Detectar o toolchain do Conan baseado no ABI atual
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CONAN_TOOLCHAIN "${CMAKE_CURRENT_SOURCE_DIR}/../../../.cxx/conan/debug/${ANDROID_ABI}/conan_toolchain.cmake")
+    if(EXISTS ${CONAN_TOOLCHAIN})
+        message(STATUS "Found Conan toolchain: ${CONAN_TOOLCHAIN}")
+        set(CMAKE_TOOLCHAIN_FILE ${CONAN_TOOLCHAIN} CACHE FILEPATH "Conan toolchain" FORCE)
+    else()
+        message(STATUS "Conan toolchain not found at: ${CONAN_TOOLCHAIN}")
+    endif()
+endif()
+
+# Define a name for this project.
 project(calculator)
 
 # ----------------------------------------
@@ -74,3 +87,4 @@ target_link_libraries(
     sharedLibrary
     staticLibrary
 )
+
