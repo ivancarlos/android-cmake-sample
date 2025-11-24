@@ -23,8 +23,8 @@ init: ## Cria/ atualiza o wrapper Gradle
 	$(MY_GRADLE_LOCAL) wrapper
 
 build_library_debug:
-	(cd shared_library; ./shared_library/library_debug_build.sh)
-	(cd static_library; ./static_library/library_debug_build.sh)
+	(cd shared_library; ./library_debug_build.sh)
+	(cd static_library; ./library_debug_build.sh)
 
 assembleDebug: ## Build APK debug
 	$(GRADLE) assembleDebug
