@@ -1,0 +1,25 @@
+[settings]
+# O sistema operacional de destino (Host) é o Android.
+os=Android
+# A arquitetura de destino (Host) para a qual você está compilando
+arch=armv8
+# O compilador usado pelo NDK é o 'clang'.
+compiler=clang
+# A versão do compilador (geralmente resolvida pelo NDK)
+compiler.version=14
+# O tipo de runtime C++ é o GNU C++ Standard Library
+compiler.cppstd=gnu17
+# Configuração de build (será sobrescrito pelo seu Gradle)
+build_type=Release
+# O nível da API mínima do Android para o build
+os.api_level=21
+
+[conf]
+# CRUCIAL: Define o caminho para o NDK (não SDK!)
+# Ajuste este caminho para onde seu NDK está instalado
+tools.android:ndk_path=/home/ivan/Android/Sdk/ndk/29.0.14033849
+
+#[tool_requires]
+#cmake/3.22.1
+# Exemplo: cmake/3.22.1
+
