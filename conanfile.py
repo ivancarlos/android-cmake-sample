@@ -1,24 +1,34 @@
 from conan import ConanFile
+from conan.tools.cmake import CMakeToolchain, cmake_layout
 
 class AndroidProjectConan(ConanFile):
+    name = "android-cmake-sample"
+    version = "1.0"
+    
+    # 1. Configurações: Necessário para definir a plataforma alvo (Android)
     settings = "os", "compiler", "build_type", "arch"
     
-    # Adicione a receita do NDK e a ferramenta CMake ao seu ambiente de build
-    tool_requires = (
-        "android-ndk/21.0.6113669", # Exemplo de NDK r21 estável
-        "cmake/3.22.1"              # Exemplo da versão do CMake
-    )
+    # Adicione suas dependências C/C++ de terceiros aqui (se houver)
+    # Exemplo: 
+    # def requirements(self):
+    #     self.requires("fmt/10.1.1")
     
     def layout(self):
-        # ... (configurações de layout)
-        pass
-
+        # 2. Layout: Define estrutura de pastas
+        cmake_layout(self)
+    
     def generate(self):
-        # O Conan irá gerar o ambiente necessário (toolchain.cmake)
-        # para que o CMake encontre o NDK e o compilador Clang.
-        pass
-
+        # 3. Geração do Toolchain: Cria os arquivos de configuração para o CMake
+        tc = CMakeToolchain(self)
+        
+        # Configurações específicas do Android são automaticamente
+        # inferidas do perfil (android_profile)
+        
+        # Opcional: Adicionar variáveis personalizadas do CMake
+        # tc.variables["MY_CUSTOM_FLAG"] = "ON"
+        
+        tc.generate()
+    
     def build(self):
-        # Seu comando de build que usa o CMake/Gradle
-        self.run("cmake --build .")
-
+        # O Gradle fará o build, então este método fica vazio
+        pass
