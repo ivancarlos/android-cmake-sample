@@ -8,8 +8,8 @@ compiler.cppstd=gnu17
 build_type=Release
 os.api_level=21
 
-[conf]
-tools.android:ndk_path=/home/ivan/Android/Sdk/ndk/29.0.14033849
+#[conf]
+#tools.android:ndk_path=/home/ivan/Android/Sdk/ndk/29.0.14033849
 
 # NADA de [requires] aqui
 # NADA de android-ndk/r29 aqui
