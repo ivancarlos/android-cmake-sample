@@ -6,26 +6,21 @@ class AndroidProjectConan(ConanFile):
     name = "android-cmake-sample"
     version = "1.0"
 
-    # Contextos suportados pelo Conan 2
     settings = "os", "arch", "compiler", "build_type"
 
-    # Forma recomendada: declarar o NDK como tool_requires
-    tool_requires = "android-ndk/r29"
-
-    # Se preferir a forma via método, seria:
-    # def build_requirements(self):
-    #     self.tool_requires("android-ndk/r29")
+    def build_requirements(self):
+        # Baixa e usa o NDK do Conan em vez do NDK local
+        # Verifique versões disponíveis com: conan search "android-ndk" -r=conancenter
+        self.tool_requires("android-ndk/r29")
 
     def layout(self):
-        # Layout padrão pra integração com CMake
         cmake_layout(self)
 
     def generate(self):
-        # Gera o toolchain file para o CMake
+        # Gera o conan_toolchain.cmake que o CMake usará
         tc = CMakeToolchain(self)
         tc.generate()
 
     def build(self):
-        # O Gradle/CMake vão fazer o build; aqui não precisa nada
+        # O Gradle/CMake fazem o build, não precisamos implementar aqui
         pass
-
