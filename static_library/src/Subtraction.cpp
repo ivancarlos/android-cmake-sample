@@ -2,5 +2,5 @@
 
 long minus(long value1, long value2)
 {
-    return value1 - value2 - 8;
+    return value1 - value2 - 7;
 }
