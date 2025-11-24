@@ -76,29 +76,29 @@ val abiList = listOf(
 // Criar uma tarefa de Conan para cada ABI
 abiList.forEach { (abi, conanArch) ->
     val conanBuildDir = project.layout.buildDirectory.dir(".cxx/conan/debug/${abi}").get().asFile
-    
+
     val taskName = "conanInstall${abi.replace("-", "").capitalize()}"
-    
+
     tasks.register<Exec>(taskName) {
         description = "Installs Conan dependencies for $abi"
         group = "conan"
-        
+
         doFirst {
             conanBuildDir.mkdirs()
         }
-        
+
         workingDir = conanBuildDir
-        
+
         commandLine(
             "conan", "install",
             rootProject.file("conanfile.py").absolutePath,
-            "-pr:h=android_profile",
+            "-pr:h", rootProject.file("conan/android_profile").absolutePath,
             "-pr:b=default",
             "-s:h", "build_type=Debug",
             "-s:h", "arch=${conanArch}",
             "--output-folder", conanBuildDir.absolutePath
         )
-        
+
         outputs.file(conanBuildDir.resolve("conan_toolchain.cmake"))
         outputs.upToDateWhen { conanBuildDir.resolve("conan_toolchain.cmake").exists() }
     }
