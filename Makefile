@@ -77,21 +77,22 @@ install: assembleDebug ## Instala APK debug no device/emulador conectado
 uninstall: ## Remove o pacote do device
 	adb uninstall $(PACKAGE)
 
-run: ## (Re)inicia a Activity principal
-	adb shell am start -n $(PACKAGE)/$(ACTIVITYNAME)
-
 back: ## Simula pressionar “Voltar”
 	adb shell input keyevent KEYCODE_BACK
 
 home: ## Simula pressionar “Home”
 	adb shell input keyevent KEYCODE_HOME
 
-start: ## (Re)inicia a Activity principal
-	adb shell am start -n $(PACKAGE)/$(MAINACTIVITY)
+run: ## (Re)inicia a Activity principal
+	adb shell am start -n $(PACKAGE)/$(ACTIVITYNAME)
+
 stop: ## Stop app
 	adb shell am force-stop $(PACKAGE)
 log:## log do android
 	adb logcat | grep $(PACKAGE)
+log2:## log do android
+	adb logcat *:E DEBUG:* | grep -E "Fatal|JNI|SIG|$(PACKAGE)"
+
 # ----------  EMULADOR ----------
 emu: ## Liga o emulador Pixel_XL_API_30 (Flutter)
 	flutter emulators --launch Pixel_XL_API_30
