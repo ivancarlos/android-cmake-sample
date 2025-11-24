@@ -3,7 +3,7 @@ NAME            := app
 MY_GRADLE_LOCAL ?= /opt/gradle/gradle-8.10.2/bin/gradle
 SDK             ?= $(HOME)/Android/Sdk
 VERSION         ?= 36.1.0                       # build-tools a usar
-GRADLE          := ./gradlew
+GRADLE          := ./gradlew --warning-mode all
 AAPT            := $(SDK)/build-tools/$(VERSION)/aapt
 
 apk_debug       := app/build/outputs/apk/debug/$(NAME)-debug.apk
