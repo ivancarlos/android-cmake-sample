@@ -1,4 +1,4 @@
-NAME            := Emu48-v3.0
+NAME            := app
 # ----------  CONFIGURAÇÕES ----------
 MY_GRADLE_LOCAL ?= /opt/gradle/gradle-8.10.2/bin/gradle
 SDK             ?= $(HOME)/Android/Sdk
@@ -22,9 +22,13 @@ help: ## Mostra esta ajuda
 init: ## Cria/ atualiza o wrapper Gradle
 	$(MY_GRADLE_LOCAL) wrapper
 
+build_library_debug:
+	(cd shared_library; shared_library/library_debug_build.sh)
+	(cd static_library; static_library/library_debug_build.sh)
+
 assembleDebug: ## Build APK debug
 	$(GRADLE) assembleDebug
-debug: assembleDebug        # atalho
+debug: build_library_debug assembleDebug   # atalho
 
 assembleRelease: ## Build APK release (não assinado)
 	$(GRADLE) assembleRelease
@@ -60,5 +64,8 @@ emu: ## Liga o emulador Pixel_XL_API_30 (Flutter)
 # Caso use AVD puro, troque por:
 # emu:
 #	$(SDK)/emulator/emulator -avd Pixel_XL_API_30 &
+
+scp: $(apk_debug)
+	scp $(apk_debug) dev:www
 
 # eof
