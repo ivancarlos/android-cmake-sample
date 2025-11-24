@@ -1,26 +1,9 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    // Android Gradle Plugin moderno para Gradle 8.10.x
+    id("com.android.application") version "8.5.0" apply false
+    id("com.android.library") version "8.5.0" apply false
 
-buildscript {
-    extra.set("compileSdkProjectVersion", 31)
-    extra.set("minSdkProjectVersion", 21)
-    extra.set("targetSdkProjectVersion", 31)
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("com.android.tools.build:gradle:7.2.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle.kts files
-    }
+    // Kotlin Android plugin moderno
+    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
