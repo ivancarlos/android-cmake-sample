@@ -59,8 +59,8 @@ android {
         }
     }
 
-    ndkVersion '29.0.14033849'
-    buildToolsVersion '36.1.0'
+    ndkVersion = "29.0.14033849"
+    buildToolsVersion = "36.1.0"
 }
 
 dependencies {
