@@ -19,7 +19,8 @@ android {
 
         // specify for which architectures we want to generate native library files.
         ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
+            abiFilters.addAll(listOf("armeabi-v7a", "x86"))
+            // abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
         }
 
         // define the path where prebuilt ".so" files are embedded in the final APK
@@ -55,7 +56,7 @@ android {
             // define the path where the CMakeList has been put for this module.
             path("src/main/cpp/CMakeLists.txt")
             // specify the CMake version we want to use.
-            version = "3.18.1"
+            version = "3.22.1"
         }
     }
 
