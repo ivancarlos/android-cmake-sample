@@ -1,9 +1,15 @@
 # Define the minimum version of CMake required to use this CMakeList.
 # Some functions don't exist in previous version of CMake by exampe.
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5)
 
 # Define a name for this project. It will be accessible with ${PROJECT_NAME}.
 project(calculator)
+
+# ----------------------------------------
+# Opções de build para debug
+# ----------------------------------------
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create a library with the name defined for the project.
 # Set it as SHARED library (will generate a .so file)
