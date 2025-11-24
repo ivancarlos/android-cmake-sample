@@ -15,3 +15,8 @@ out/
 *.db
 
 .externalNativeBuild
+
+ gradlew.bat
+ gradle
+ gradlew
+ .gradle
