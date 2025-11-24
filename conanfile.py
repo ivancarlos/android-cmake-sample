@@ -11,7 +11,7 @@ class AndroidProjectConan(ConanFile):
     def build_requirements(self):
         # Baixa e usa o NDK do Conan em vez do NDK local
         # Verifique versões disponíveis com: conan search "android-ndk" -r=conancenter
-        self.tool_requires("android-ndk/r29")
+        # self.tool_requires("android-ndk/r29")
 
     def layout(self):
         cmake_layout(self)
