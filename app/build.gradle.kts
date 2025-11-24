@@ -19,8 +19,7 @@ android {
 
         // specify for which architectures we want to generate native library files.
         ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "x86"))
-            // abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
+            abiFilters.addAll(listOf("armeabi-v7a", "x86", "x86_64", "arm64-v8a"))
         }
 
         // define the path where prebuilt ".so" files are embedded in the final APK
@@ -59,9 +58,6 @@ android {
             version = "3.22.1"
         }
     }
-
-    ndkVersion = "29.0.14033849"
-    buildToolsVersion = "36.1.0"
 }
 
 dependencies {
